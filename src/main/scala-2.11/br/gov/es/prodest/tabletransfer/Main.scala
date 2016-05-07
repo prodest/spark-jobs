@@ -33,7 +33,7 @@ object Main extends App{
   original_table.registerTempTable(TABLE)
 
   // pegar todos os registros
-  val results = sqlContext.sql(s"SELECT * FROM ${TABLE}")
+  val results = sqlContext.sql(s"SELECT * FROM $TABLE")
 
   //inserir no novo bd todos os registros
   //obs ele cria a tabela se não for especificada
