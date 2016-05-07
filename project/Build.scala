@@ -1,5 +1,3 @@
-import com.github.retronym.SbtOneJar
-import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import sbt.Keys._
 import sbt._
 import sbtassembly.{Assembly, MergeStrategy, PathList}
@@ -15,6 +13,8 @@ object xBuild extends Build {
     organization := "es.gov.prodest",
     scalaVersion := "2.11.8"
   )
+
+
 
   val defaultMergeStrategy: String => MergeStrategy = {
     case x if Assembly.isConfigFile(x) =>
@@ -50,11 +50,14 @@ object xBuild extends Build {
   lazy val bintray = "bintray.com" at "http://dl.bintray.com/sbt/sbt-plugin-releases"
 
   // lib deps dev
-  lazy val sparkSQL  = "org.apache.spark" % "spark-sql_2.11" % "1.6.0" % "provided"   // deve ser rodado dentro do spark-submit
+  lazy val sparkSQL  = "org.apache.spark" % "spark-sql_2.11" % "1.6.0" % Provided    exclude ("commons-net","commons-net")  exclude("jline","jline") // deve ser rodado dentro do spark-submit
   lazy val jtds  = "net.sourceforge.jtds" % "jtds" % "1.3.1" exclude("org.slf4j","slf4j-api") exclude ("commons-net","commons-net")  exclude("jline","jline")
   lazy val jacksonDataBind  = "com.fasterxml.jackson.core_2.11" % "jackson-databind" % "2.4.4" exclude ("commons-net","commons-net")  exclude("jline","jline")
   lazy val jline =   "jline" % "jline" % "2.12.1" exclude ("commons-logging","commons-logging")
   lazy val commonsNet =   "commons-net" % "commons-net" % "3.1"
+
+
+
 
 
 
@@ -75,7 +78,7 @@ object xBuild extends Build {
 
 
 
-  lazy val libDep = Seq ( sparkSQL, jtds  )
+  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline )
   classpathTypes ~= (_ + "orbit")
   dependencyOverrides ++= Set(
     jacksonDataBind
