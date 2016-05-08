@@ -38,5 +38,6 @@ object Main extends App{
   //inserir no novo bd todos os registros
   //obs ele cria a tabela se não for especificada
 
-  results.save(OUT,SaveMode.Overwrite)
+  //results(OUT,SaveMode.Overwrite)
+  results.write.mode(SaveMode.Overwrite).json(OUT)
 }
