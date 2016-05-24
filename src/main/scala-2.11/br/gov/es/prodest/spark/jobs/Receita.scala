@@ -1,17 +1,19 @@
 package br.gov.es.prodest.spark.jobs
 
 import java.util.Properties
+
+import org.apache.commons.io.IOUtils
 import org.apache.spark.sql.types._
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{Row, SQLContext, SaveMode}
+
+import scala.io.Source
 ;
 
 object Receita extends App{
   val CONNECTION_URL = args(0)
   val OUT = args(1)
   val TABLE = "Receita"
-
-
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-receita").setMaster("local")
@@ -28,60 +30,32 @@ object Receita extends App{
   ).registerTempTable(TABLE)
 
 
+  val fOptString = (value : Any) =>  value match {
+    case null => ""
+    case s:String => value.toString.trim.toUpperCase
+  }
+
+
   // pegar todos os registros
-  val results = sqlContext.sql(s"""
-        SELECT
-        codUnidadeGestora,
-        strNomeUnidadeGestora,
-        codCategoriaEconomica,
-        dsCategoriaEconomica,
-        codOrigem,
-        dsOrigem,
-        codRubrica,
-        dsRubrica,
-        codAlinea,
-        dsAlinea,
-        codSubalinea,
-        dsSubalinea,
-        vlPrevisto,
-        vlRealizado,
-        ano,
-        case MONTH(data)
-        when 1 then 'Janeiro'
-        when 2 then 'Fevereiro'
-        when 3 then 'Março'
-        when 4 then 'Abril'
-        when 5 then 'Maio'
-        when 6 then 'Junho'
-        when 7 then 'Julho'
-        when 8 then 'Agosto'
-        when 9 then 'Setembro'
-        when 10 then 'Outubro'
-        when 11 then 'Novembro'
-        when 12 then 'Dezembro'
-        end MesDescritivo,
-        data as dataReceita
-        FROM $TABLE where ano >= 2010
-    """
-  ).map(t => {
+  val results = sqlContext.sql(IOUtils.toString(getClass.getResource("/receita.sql").openStream(),"UTF-8")).map(t => {
 
     val codUnidadeGestora =  t(0).toString
-    val strUnidadeGestora =  t(1).toString.trim.toUpperCase
+    val strUnidadeGestora =   fOptString( t(1) )
     //--
     val codCategoriaEconomica = t(2).toString
-    val strCategoriaEconomica =  t(3).toString.trim.toUpperCase
+    val strCategoriaEconomica =  fOptString( t(3) )
     //--
     val codOrigem = t(4).toString
-    val dsOrigem =  t(5).toString.trim.toUpperCase
+    val dsOrigem =  fOptString( t(3) )
     //--
     val codRubrica = t(6).toString
-    val dsRubrica = t(7).toString.trim.toUpperCase
+    val dsRubrica = fOptString( t(7) )
     //--
     val codAlinea = t(8).toString
-    val dsAlinea = t(9).toString.trim.toUpperCase
+    val dsAlinea = fOptString( t(9) )
     //--
     val codSubalinea = t(10).toString
-    val dsSubalinea = t(11).toString.trim.toUpperCase
+    val dsSubalinea = fOptString( t(11) )
 
     //--
     val vlPrevisto = t(12)

@@ -2,17 +2,18 @@ package br.gov.es.prodest.spark.jobs
 
 import java.util.Properties
 
+import org.apache.commons.io.IOUtils
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.{Row, SQLContext, SaveMode}
 import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.sql.{Row, SQLContext, SaveMode}
+
+import scala.io.Source
 ;
 
 object Despesa extends App{
   val CONNECTION_URL = args(0)
   val OUT = args(1)
-  val TABLE = "Receita"
-
-
+  val TABLE = "Despesa"
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-despesa").setMaster("local")
@@ -29,76 +30,82 @@ object Despesa extends App{
   ).registerTempTable(TABLE)
 
 
+  val fOptString = (value : Any) =>  value match {
+    case null => ""
+    case s:String => value.toString.trim.toUpperCase
+  }
+
+
+
+
+
+
+
+
+
   // pegar todos os registros
-  val results = sqlContext.sql(s"""
-        SELECT
-        a.codUnidadeGestora,
-        a.strNomeUnidadeGestora,
-        a.codCategoriaEconomica,
-        a.dsCategoriaEconomica,
-        a.codOrigem,
-        a.dsOrigem,
-        a.codRubrica,
-        a.dsRubrica,
-        a.codAlinea,
-        a.dsAlinea,
-        a.codSubalinea,
-        a.dsSubalinea,
-        a.vlPrevisto,
-        a.vlRealizado,
-        case MONTH(a.data)
-        when 1 then 'Janeiro'
-        when 2 then 'Fevereiro'
-        when 3 then 'Março'
-        when 4 then 'Abril'
-        when 5 then 'Maio'
-        when 6 then 'Junho'
-        when 7 then 'Julho'
-        when 8 then 'Agosto'
-        when 9 then 'Setembro'
-        when 10 then 'Outubro'
-        when 11 then 'Novembro'
-        when 12 then 'Dezembro'
-        end MesDescritivo,
-        a.data as dataReceita
-        FROM $TABLE a
-    """
-  ).map(t => {
+  val results = sqlContext.sql(IOUtils.toString(getClass.getResource("/despesa.sql").openStream(),"UTF-8")).map(t => {
 
     val codUnidadeGestora =  t(0).toString
-    val strUnidadeGestora =  t(1).toString.trim.toUpperCase
+    val strUnidadeGestora =   fOptString( t(1) )
     //--
     val codCategoriaEconomica = t(2).toString
-    val strCategoriaEconomica =  t(3).toString.trim.toUpperCase
+    val strCategoriaEconomica =  fOptString( t(3) )
     //--
-    val codOrigem = t(4).toString
-    val dsOrigem =  t(5).toString.trim.toUpperCase
+    val codigoAcao = t(4).toString
+    val strAcao =  fOptString( t(5) )
     //--
-    val codRubrica = t(6).toString
-    val dsRubrica = t(7).toString.trim.toUpperCase
+    val codElementoDespesa = t(6).toString
+    val strElementoDespesa =  fOptString( t(7) )
     //--
-    val codAlinea = t(8).toString
-    val dsAlinea = t(9).toString.trim.toUpperCase
+    val codSubElementoDespesa = t(8).toString
+    val strSubElementoDespesa =  fOptString( t(9) )
     //--
-    val codSubalinea = t(10).toString
-    val dsSubalinea = t(11).toString.trim.toUpperCase
-
+    val codFavorecido = t(10).toString
+    val strFavorecido =  fOptString( t(11) )
     //--
-    val vlPrevisto = t(12)
-    val vlRealizado = t(13)
-    val mesDescritivo = t(14)
-    val dataReceita = t(15)
+    val codFonte = t(12).toString
+    val strFonte =  fOptString( t(13) )
+    //--
+    val codFuncao = t(14).toString
+    val strFuncao =  fOptString( t(15) )
+    //--
+    val codSubFuncao = t(16).toString
+    val strSubFuncao =  fOptString( t(17) )
+    //--
+    val codModalidade = t(18).toString
+    val strModalidade =  fOptString( t(19) )
+    //--
+    val codPrograma = t(20).toString
+    val strPrograma =  fOptString( t(21) )
+    //--
+    val valorEmpenho = t(22)
+    val valorLiquidado = t(23)
+    val valorPago = t(24)
+    val valorRap = t(25)
+    // --
+    val ano = t(26)
+    val mesDescritivo = t(27)
+    val dataReceita = t(28)
 
 
     Row(
       s"($codUnidadeGestora) $strUnidadeGestora",
       s"($codCategoriaEconomica) $strCategoriaEconomica",
-      s"($codOrigem) $dsOrigem",
-      s"($codRubrica) $dsRubrica",
-      s"($codAlinea) $dsAlinea",
-      s"($codSubalinea) $dsSubalinea",
-      vlPrevisto,
-      vlRealizado,
+      s"($codigoAcao) $strAcao",
+      s"($codElementoDespesa) $strElementoDespesa",
+      s"($codSubElementoDespesa) $strSubElementoDespesa",
+      s"($codFavorecido) $strFavorecido",
+      s"($codFonte) $strFonte",
+      s"($codFuncao) $strFuncao",
+      s"($codSubFuncao) $strSubFuncao",
+      s"($codModalidade) $strModalidade",
+      s"($codPrograma) $strPrograma",
+      valorEmpenho,
+      valorLiquidado,
+      valorPago,
+      valorRap,
+      ano,
       mesDescritivo,
       dataReceita
     )
@@ -109,12 +116,20 @@ object Despesa extends App{
     Seq(
       StructField("UnidadeGestora", StringType),
       StructField("CategoriaEconomica", StringType),
-      StructField("Origem", StringType),
-      StructField("Rubrica", StringType),
-      StructField("Alinea", StringType),
-      StructField("Subalinea", StringType),
-      StructField("vlPrevisto", DecimalType(32,2)),
-      StructField("vlRealizado", DecimalType(32,2)),
+      StructField("Acao", StringType),
+      StructField("ElementoDespesa", StringType),
+      StructField("SubElementoDespesa", StringType),
+      StructField("Favorecido", StringType),
+      StructField("Fonte", StringType),
+      StructField("Funcao", StringType),
+      StructField("SubFuncao", StringType),
+      StructField("Modalidade", StringType),
+      StructField("Programa", StringType),
+      StructField("valorEmpenho", DecimalType(32,2)),
+      StructField("valorLiquidado", DecimalType(32,2)),
+      StructField("valorPago", DecimalType(32,2)),
+      StructField("valorRap", DecimalType(32,2)),
+      StructField("Ano", IntegerType),
       StructField("MesDescritivo", StringType),
       StructField("dataReceita", TimestampType)
     )
