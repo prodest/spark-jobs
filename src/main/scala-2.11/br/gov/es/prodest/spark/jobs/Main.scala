@@ -1,4 +1,4 @@
-package br.gov.es.prodest.tabletransfer
+package br.gov.es.prodest.spark.jobs
 
 import java.util.Properties
 
@@ -37,6 +37,5 @@ object Main extends App{
 
   //inserir no novo bd todos os registros
   //obs ele cria a tabela se não for especificada
-
-  results.save(OUT,SaveMode.Overwrite)
+  results.write.mode(SaveMode.Overwrite).json(OUT)
 }
