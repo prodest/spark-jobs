@@ -9,7 +9,7 @@ object xBuild extends Build {
 
 
   lazy val buildSettings = Seq(
-    version := "0.1-SNAPSHOT",
+    version := "0.2-build1",
     organization := "es.gov.prodest",
     scalaVersion := "2.11.8"
   )
