@@ -89,7 +89,7 @@ object xBuild extends Build {
 
 
   lazy val TransparenciaTaskRunner = Project(
-    id = "spark-table-transfer",
+    id = "spark-jobs",
     base = file("."),
     settings = commonSettings ++ Seq(
       libraryDependencies ++= libDep)  )
