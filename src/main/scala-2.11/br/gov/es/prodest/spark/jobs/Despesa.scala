@@ -4,6 +4,7 @@ import java.util.Properties
 
 import org.apache.commons.io.IOUtils
 import org.apache.spark.sql.types._
+import br.gov.es.prodest.spark.Utils._
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{Row, SQLContext, SaveMode}
 
@@ -14,6 +15,7 @@ object Despesa extends App{
   val CONNECTION_URL = args(0)
   val OUT = args(1)
   val TABLE = "Despesa"
+  val TIMEZONE = "GMT-3"
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-despesa").setMaster("local")
@@ -28,14 +30,6 @@ object Despesa extends App{
     TABLE,
     new Properties()
   ).registerTempTable(TABLE)
-
-
-  val fOptString = (value : Any) =>  value match {
-    case null => ""
-    case s:String => value.toString.trim.toUpperCase
-  }
-
-
 
 
 
@@ -86,7 +80,7 @@ object Despesa extends App{
     // --
     val ano = t(26)
     val mesDescritivo = t(27)
-    val dataReceita = t(28)
+    val dataReceita = fDateString(t(28),TIMEZONE)
 
 
     Row(

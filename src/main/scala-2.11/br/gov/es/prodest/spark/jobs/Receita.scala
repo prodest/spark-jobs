@@ -1,7 +1,9 @@
 package br.gov.es.prodest.spark.jobs
 
-import java.util.Properties
-
+import java.sql.Timestamp
+import java.text.{DateFormat, SimpleDateFormat}
+import java.util.{Properties, TimeZone}
+import br.gov.es.prodest.spark.Utils._
 import org.apache.commons.io.IOUtils
 import org.apache.spark.sql.types._
 import org.apache.spark.{SparkConf, SparkContext}
@@ -11,9 +13,11 @@ import scala.io.Source
 ;
 
 object Receita extends App{
+
   val CONNECTION_URL = args(0)
   val OUT = args(1)
   val TABLE = "Receita"
+  val TIMEZONE = "GMT-3"
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-receita").setMaster("local")
@@ -30,10 +34,7 @@ object Receita extends App{
   ).registerTempTable(TABLE)
 
 
-  val fOptString = (value : Any) =>  value match {
-    case null => ""
-    case s:String => value.toString.trim.toUpperCase
-  }
+
 
 
   // pegar todos os registros
@@ -62,7 +63,7 @@ object Receita extends App{
     val vlRealizado = t(13)
     val ano = t(14)
     val mesDescritivo = t(15)
-    val dataReceita = t(16)
+    val dataReceita =  fDateString(t(16),TIMEZONE)
 
 
     Row(
@@ -93,7 +94,7 @@ object Receita extends App{
       StructField("vlRealizado", DecimalType(32,2)),
       StructField("Ano", IntegerType),
       StructField("MesDescritivo", StringType),
-      StructField("dataReceita", TimestampType)
+      StructField("dataReceita", StringType)
     )
 
   val schema = StructType(fields)
