@@ -50,11 +50,12 @@ object xBuild extends Build {
   lazy val bintray = "bintray.com" at "http://dl.bintray.com/sbt/sbt-plugin-releases"
 
   // lib deps dev
-  lazy val sparkSQL  = "org.apache.spark" % "spark-sql_2.11" % "1.6.0" % Provided    exclude ("commons-net","commons-net")  exclude("jline","jline") // deve ser rodado dentro do spark-submit
+  lazy val sparkSQL  = "org.apache.spark" % "spark-sql_2.11" % "1.6.0"  exclude ("commons-net","commons-net")  exclude("jline","jline") // deve ser rodado dentro do spark-submit
   lazy val jtds  = "net.sourceforge.jtds" % "jtds" % "1.3.1" exclude("org.slf4j","slf4j-api") exclude ("commons-net","commons-net")  exclude("jline","jline")
   lazy val jacksonDataBind  = "com.fasterxml.jackson.core_2.11" % "jackson-databind" % "2.4.4" exclude ("commons-net","commons-net")  exclude("jline","jline")
   lazy val jline =   "jline" % "jline" % "2.12.1" exclude ("commons-logging","commons-logging")
   lazy val commonsNet =   "commons-net" % "commons-net" % "3.1"
+  lazy val joda  = "joda-time" % "joda-time" % "2.9.2"
 
 
 
@@ -78,7 +79,7 @@ object xBuild extends Build {
 
 
 
-  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline )
+  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline  )
   classpathTypes ~= (_ + "orbit")
   dependencyOverrides ++= Set(
     jacksonDataBind
