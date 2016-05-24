@@ -42,4 +42,4 @@ SELECT
   end MesDescritivo,
   data as dataDespesa
 FROM Despesa a
-WHERE Ano >= 2016
+WHERE Ano >= 2009
