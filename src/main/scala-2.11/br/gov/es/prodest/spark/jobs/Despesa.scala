@@ -80,7 +80,7 @@ object Despesa extends App{
     // --
     val ano = t(26)
     val mesDescritivo = t(27)
-    val dataReceita = fDateString(t(28),TIMEZONE)
+    val dataDespesa = fDateString(t(28),TIMEZONE)
 
 
     Row(
@@ -101,7 +101,7 @@ object Despesa extends App{
       valorRap,
       ano,
       mesDescritivo,
-      dataReceita
+      dataDespesa
     )
   })
 
@@ -125,7 +125,7 @@ object Despesa extends App{
       StructField("valorRap", DecimalType(32,2)),
       StructField("Ano", IntegerType),
       StructField("MesDescritivo", StringType),
-      StructField("dataReceita", TimestampType)
+      StructField("dataDespesa", TimestampType)
     )
 
   val schema = StructType(fields)
