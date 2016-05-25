@@ -125,7 +125,7 @@ object Despesa extends App{
       StructField("valorRap", DecimalType(32,2)),
       StructField("Ano", IntegerType),
       StructField("MesDescritivo", StringType),
-      StructField("dataDespesa", TimestampType)
+      StructField("dataDespesa", StringType)
     )
 
   val schema = StructType(fields)
