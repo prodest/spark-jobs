@@ -11,6 +11,8 @@ SELECT
   dsAlinea,
   codSubalinea,
   dsSubalinea,
+  codEspecie,
+  dsEspecie,
   vlPrevisto,
   vlRealizado,
   ano,

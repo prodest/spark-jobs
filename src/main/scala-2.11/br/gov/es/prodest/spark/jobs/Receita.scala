@@ -57,13 +57,16 @@ object Receita extends App{
     //--
     val codSubalinea = t(10).toString
     val dsSubalinea = fOptString( t(11) )
+    //--
+    val codEspecie = t(12).toString
+    val dsEspecie = fOptString( t(13) )
 
     //--
-    val vlPrevisto = t(12)
-    val vlRealizado = t(13)
-    val ano = t(14)
-    val mesDescritivo = t(15)
-    val dataReceita =  fDateString(t(16),TIMEZONE)
+    val vlPrevisto = t(14)
+    val vlRealizado = t(15)
+    val ano = t(16)
+    val mesDescritivo = t(17)
+    val dataReceita =  fDateString(t(18),TIMEZONE)
 
 
     Row(
@@ -73,6 +76,7 @@ object Receita extends App{
       s"($codRubrica) $dsRubrica",
       s"($codAlinea) $dsAlinea",
       s"($codSubalinea) $dsSubalinea",
+      s"($codEspecie) $dsEspecie",
       vlPrevisto,
       vlRealizado,
       ano,
@@ -90,6 +94,7 @@ object Receita extends App{
       StructField("Rubrica", StringType),
       StructField("Alinea", StringType),
       StructField("Subalinea", StringType),
+      StructField("Especie", StringType),
       StructField("vlPrevisto", DecimalType(32,2)),
       StructField("vlRealizado", DecimalType(32,2)),
       StructField("Ano", IntegerType),
