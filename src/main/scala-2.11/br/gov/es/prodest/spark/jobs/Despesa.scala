@@ -81,20 +81,24 @@ object Despesa extends App{
     val ano = t(26)
     val mesDescritivo = t(27)
     val dataDespesa = fDateString(t(28),TIMEZONE)
+    //--
+    val codGrupoDespesa = t(29).toString
+    val strGrupoDespesa =  fOptString( t(30) )
 
 
     Row(
-      s"($codUnidadeGestora) $strUnidadeGestora",
-      s"($codCategoriaEconomica) $strCategoriaEconomica",
-      s"($codigoAcao) $strAcao",
-      s"($codElementoDespesa) $strElementoDespesa",
-      s"($codSubElementoDespesa) $strSubElementoDespesa",
-      s"($codFavorecido) $strFavorecido",
-      s"($codFonte) $strFonte",
-      s"($codFuncao) $strFuncao",
-      s"($codSubFuncao) $strSubFuncao",
-      s"($codModalidade) $strModalidade",
-      s"($codPrograma) $strPrograma",
+      s"$strUnidadeGestora ($codUnidadeGestora)",
+      s"$strCategoriaEconomica ($codCategoriaEconomica)",
+      s"$strAcao ($codigoAcao)",
+      s"$strElementoDespesa ($codElementoDespesa)",
+      s"$strSubElementoDespesa ($codSubElementoDespesa)",
+      s"$strFavorecido ($codFavorecido)",
+      s"$strFonte ($codFonte) ",
+      s"$strFuncao ($codFuncao)",
+      s"$strSubFuncao ($codSubFuncao)",
+      s"$strModalidade ($codModalidade)",
+      s"$strPrograma ($codPrograma)",
+      s"$strGrupoDespesa ($codGrupoDespesa)",
       valorEmpenho,
       valorLiquidado,
       valorPago,
@@ -119,6 +123,7 @@ object Despesa extends App{
       StructField("SubFuncao", StringType),
       StructField("Modalidade", StringType),
       StructField("Programa", StringType),
+      StructField("GrupoDespesa", StringType),
       StructField("valorEmpenho", DecimalType(32,2)),
       StructField("valorLiquidado", DecimalType(32,2)),
       StructField("valorPago", DecimalType(32,2)),

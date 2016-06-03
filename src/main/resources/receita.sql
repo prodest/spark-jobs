@@ -16,31 +16,19 @@ SELECT
   vlPrevisto,
   vlRealizado,
   ano,
-  CASE MONTH(data)
-  WHEN 1
-    THEN 'Janeiro'
-  WHEN 2
-    THEN 'Fevereiro'
-  WHEN 3
-    THEN 'Março'
-  WHEN 4
-    THEN 'Abril'
-  WHEN 5
-    THEN 'Maio'
-  WHEN 6
-    THEN 'Junho'
-  WHEN 7
-    THEN 'Julho'
-  WHEN 8
-    THEN 'Agosto'
-  WHEN 9
-    THEN 'Setembro'
-  WHEN 10
-    THEN 'Outubro'
-  WHEN 11
-    THEN 'Novembro'
-  WHEN 12
-    THEN 'Dezembro'
+  case MONTH(data)
+  when 1 then '01 - Janeiro'
+  when 2 then '02 - Fevereiro'
+  when 3 then '03 - Março'
+  when 4 then '04 - Abril'
+  when 5 then '05 - Maio'
+  when 6 then '06 - Junho'
+  when 7 then '07 - Julho'
+  when 8 then '08 - Agosto'
+  when 9 then '09 - Setembro'
+  when 10 then '10 - Outubro'
+  when 11 then '11 - Novembro'
+  when 12 then '12 - Dezembro'
   END     MesDescritivo,
   data AS dataReceita
 FROM Receita
