@@ -1,0 +1,14 @@
+language: scala
+scala:
+- 2.11.7
+script:
+- sbt compile
+- sbt test
+- sbt package
+deploy:
+  provider: releases
+  api_key:
+    secure: nU7ET7T4xHcaF8kOmyLttMxRQuvCtx2MpXhdkqiPF5i+cokacXqrGF4IowU/KwmQCbRFYEtjl8/0ErVVqy3yxiDYldVnVzxb+DgVDysPSwjr9sqxYikV8QoRq+7N0+NtKyHMZ4BZU5EKbY539ipdo4KG6AviEIADuMKrLpnUzx2sGK8c5jZCxPfZ9r1eLyOkSnWpFZouhaJ0L2GGI+TkE0Yq2S+WxBaxqy0VYn/m56yl4ZsD2vcE+1yR5byZADjo9wLcIvNgDn7AsL4FeJewlyh7jz3QCvr7ncPqV5xPU5JpFmd9IdYgYzPQk9rKW+nvRxN/SpBSuPLW0u9vjXegpTCJRs3REro/Z0DD8i54WgvnX0TPZJ7hD9dModpRkUI+k8ESKiAm2uX9a/u9HFedY0BMEiTN3jMDFUtLdsWHUflsT+UrO2rQp0raxGxgsovaCpVg7iwVtkzWwjFmKp+mexZtpVbdzcViD3jzEByFzOwIgl8xSd6mPzUDBpzExRWncNLyBr3Mj2v3v0cOR3CZzDzVV/l+AnrWumybxKjs3jFVrbZG+MUNaAgcBTxzv/HL+T0um1DXvQno5bBfEtoP8DB3cRsbvwY6h3pJg2QTRdPKs25FQ28zcFLpksX7UU8JvqsVERCZ320bgAwRerAXEUx8TNQAWB70l7pr/1QE16M=
+  file: target/scala-2.11/spark-jobs_*.jar
+  on:
+    repo: prodest/spark-jobs
