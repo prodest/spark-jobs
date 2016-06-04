@@ -4,6 +4,7 @@ scala:
 script:
 - sbt compile
 - sbt test
+- rm -rf ./target/scala-2.11/*
 - sbt package
 deploy:
   provider: releases
