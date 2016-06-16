@@ -17,9 +17,11 @@ object Utils {
     case null => null
     case s:Timestamp => {
       val dataf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-      dataf.setTimeZone(TimeZone.getTimeZone(timezone))
+      //      dataf.setTimeZone(TimeZone.getTimeZone(timezone))
       dataf.format(value)
     }
   }
 
 }
+
+
