@@ -15,7 +15,7 @@ object Despesa extends App{
   val CONNECTION_URL = args(0)
   val OUT = args(1)
   val TABLE = "Despesa"
-  val TIMEZONE = "GMT-3"
+  val TIMEZONE = "UTC"
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-despesa").setMaster("local")
