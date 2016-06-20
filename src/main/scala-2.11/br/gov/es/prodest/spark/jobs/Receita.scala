@@ -17,7 +17,7 @@ object Receita extends App{
   val CONNECTION_URL = args(0)
   val OUT = args(1)
   val TABLE = "Receita"
-  val TIMEZONE = "GMT-3"
+  val TIMEZONE = "UTC"
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-receita").setMaster("local")
