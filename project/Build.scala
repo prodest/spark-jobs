@@ -28,8 +28,7 @@ object xBuild extends Build {
   lazy val jline =   "jline" % "jline" % "2.12.1" exclude ("commons-logging","commons-logging")
   lazy val commonsNet =   "commons-net" % "commons-net" % "3.1"
   lazy val joda  = "joda-time" % "joda-time" % "2.9.2"
-
-
+  lazy val mongoSpark = "org.mongodb.spark" % "mongo-spark-connector_2.11" % "1.0.0"
 
 
 
@@ -51,7 +50,7 @@ object xBuild extends Build {
 
 
 
-  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline  )
+  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline  , mongoSpark )
   classpathTypes ~= (_ + "orbit")
   dependencyOverrides ++= Set(
     jacksonDataBind

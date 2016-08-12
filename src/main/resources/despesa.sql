@@ -44,4 +44,4 @@ SELECT
   a.CodigoGrupoDespesa,
   a.GrupoDespesa
 FROM Despesa a
-WHERE Ano >= 2009
+WHERE Ano >= 2016 and  MONTH(a.data) > 7
