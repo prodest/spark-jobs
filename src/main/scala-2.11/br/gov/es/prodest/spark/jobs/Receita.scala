@@ -1,7 +1,9 @@
 package br.gov.es.prodest.spark.jobs
 
-import java.util.Properties
-
+import java.sql.Timestamp
+import java.text.{DateFormat, SimpleDateFormat}
+import java.util.{Properties, TimeZone}
+import br.gov.es.prodest.spark.Utils._
 import org.apache.commons.io.IOUtils
 import org.apache.spark.sql.types._
 import org.apache.spark.{SparkConf, SparkContext}
@@ -11,9 +13,11 @@ import scala.io.Source
 ;
 
 object Receita extends App{
+
   val CONNECTION_URL = args(0)
   val OUT = args(1)
   val TABLE = "Receita"
+  val TIMEZONE = "UTC"
 
   // spark!
   val conf = new SparkConf().setAppName("spark-jobs-receita").setMaster("local")
@@ -30,10 +34,7 @@ object Receita extends App{
   ).registerTempTable(TABLE)
 
 
-  val fOptString = (value : Any) =>  value match {
-    case null => ""
-    case s:String => value.toString.trim.toUpperCase
-  }
+
 
 
   // pegar todos os registros
@@ -46,7 +47,7 @@ object Receita extends App{
     val strCategoriaEconomica =  fOptString( t(3) )
     //--
     val codOrigem = t(4).toString
-    val dsOrigem =  fOptString( t(3) )
+    val dsOrigem =  fOptString( t(5) )
     //--
     val codRubrica = t(6).toString
     val dsRubrica = fOptString( t(7) )
@@ -56,22 +57,26 @@ object Receita extends App{
     //--
     val codSubalinea = t(10).toString
     val dsSubalinea = fOptString( t(11) )
+    //--
+    val codEspecie = t(12).toString
+    val dsEspecie = fOptString( t(13) )
 
     //--
-    val vlPrevisto = t(12)
-    val vlRealizado = t(13)
-    val ano = t(14)
-    val mesDescritivo = t(15)
-    val dataReceita = t(16)
+    val vlPrevisto = t(14)
+    val vlRealizado = t(15)
+    val ano = t(16)
+    val mesDescritivo = t(17)
+    val dataReceita =  fDateString(t(18),TIMEZONE)
 
 
     Row(
-      s"($codUnidadeGestora) $strUnidadeGestora",
-      s"($codCategoriaEconomica) $strCategoriaEconomica",
-      s"($codOrigem) $dsOrigem",
-      s"($codRubrica) $dsRubrica",
-      s"($codAlinea) $dsAlinea",
-      s"($codSubalinea) $dsSubalinea",
+      s"$strUnidadeGestora ($codUnidadeGestora)",
+      s"$strCategoriaEconomica ($codCategoriaEconomica)",
+      s"$dsOrigem ($codOrigem)",
+      s"$dsRubrica ($codRubrica)",
+      s"$dsAlinea ($codAlinea)",
+      s"$dsSubalinea ($codSubalinea)",
+      s"$dsEspecie ($codEspecie)",
       vlPrevisto,
       vlRealizado,
       ano,
@@ -89,11 +94,12 @@ object Receita extends App{
       StructField("Rubrica", StringType),
       StructField("Alinea", StringType),
       StructField("Subalinea", StringType),
+      StructField("Especie", StringType),
       StructField("vlPrevisto", DecimalType(32,2)),
       StructField("vlRealizado", DecimalType(32,2)),
       StructField("Ano", IntegerType),
       StructField("MesDescritivo", StringType),
-      StructField("dataReceita", TimestampType)
+      StructField("dataReceita", StringType)
     )
 
   val schema = StructType(fields)

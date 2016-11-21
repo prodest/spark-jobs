@@ -1,6 +1,5 @@
 import sbt.Keys._
 import sbt._
-import sbtassembly.{Assembly, MergeStrategy, PathList}
 
 
 object xBuild extends Build {
@@ -9,38 +8,11 @@ object xBuild extends Build {
 
 
   lazy val buildSettings = Seq(
-    version := "0.2-build1",
+    version := "0.3-build1",
     organization := "es.gov.prodest",
     scalaVersion := "2.11.8"
   )
 
-
-
-  val defaultMergeStrategy: String => MergeStrategy = {
-    case x if Assembly.isConfigFile(x) =>
-      MergeStrategy.concat
-    case PathList(ps@_*) if Assembly.isReadme(ps.last) || Assembly.isLicenseFile(ps.last) =>
-      MergeStrategy.rename
-    case PathList("META-INF", xs@_*) =>
-      xs map {
-        _.toLowerCase
-      } match {
-        case ("application.conf" :: Nil) =>
-          MergeStrategy.first
-        case ("manifest.mf" :: Nil) | ("index.list" :: Nil) | ("dependencies" :: Nil) =>
-          MergeStrategy.discard
-        case ps@(x :: xs) if ps.last.endsWith(".sf") || ps.last.endsWith(".dsa") =>
-          MergeStrategy.discard
-        case "plexus" :: xs =>
-          MergeStrategy.discard
-        case "services" :: xs =>
-          MergeStrategy.filterDistinctLines
-        case ("spring.schemas" :: Nil) | ("spring.handlers" :: Nil) =>
-          MergeStrategy.filterDistinctLines
-        case _ => MergeStrategy.last
-      }
-    case _ => MergeStrategy.last
-  }
 
   // Resolvers
   lazy val local = "Local Maven Repository" at "file:///" + Path.userHome + "/.m2/repository"
@@ -56,8 +28,7 @@ object xBuild extends Build {
   lazy val jline =   "jline" % "jline" % "2.12.1" exclude ("commons-logging","commons-logging")
   lazy val commonsNet =   "commons-net" % "commons-net" % "3.1"
   lazy val joda  = "joda-time" % "joda-time" % "2.9.2"
-
-
+  lazy val mongoSpark = "org.mongodb.spark" % "mongo-spark-connector_2.11" % "1.0.0"
 
 
 
@@ -79,7 +50,7 @@ object xBuild extends Build {
 
 
 
-  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline  )
+  lazy val libDep = Seq ( sparkSQL, jtds  , commonsNet , jline  , mongoSpark )
   classpathTypes ~= (_ + "orbit")
   dependencyOverrides ++= Set(
     jacksonDataBind
@@ -89,7 +60,7 @@ object xBuild extends Build {
 
 
   lazy val TransparenciaTaskRunner = Project(
-    id = "spark-table-transfer",
+    id = "spark-jobs",
     base = file("."),
     settings = commonSettings ++ Seq(
       libraryDependencies ++= libDep)  )
