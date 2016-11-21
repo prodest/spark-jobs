@@ -47,7 +47,7 @@ object Receita extends App{
     val strCategoriaEconomica =  fOptString( t(3) )
     //--
     val codOrigem = t(4).toString
-    val dsOrigem =  fOptString( t(3) )
+    val dsOrigem =  fOptString( t(5) )
     //--
     val codRubrica = t(6).toString
     val dsRubrica = fOptString( t(7) )
@@ -70,13 +70,13 @@ object Receita extends App{
 
 
     Row(
-      s"($codUnidadeGestora) $strUnidadeGestora",
-      s"($codCategoriaEconomica) $strCategoriaEconomica",
-      s"($codOrigem) $dsOrigem",
-      s"($codRubrica) $dsRubrica",
-      s"($codAlinea) $dsAlinea",
-      s"($codSubalinea) $dsSubalinea",
-      s"($codEspecie) $dsEspecie",
+      s"$strUnidadeGestora ($codUnidadeGestora)",
+      s"$strCategoriaEconomica ($codCategoriaEconomica)",
+      s"$dsOrigem ($codOrigem)",
+      s"$dsRubrica ($codRubrica)",
+      s"$dsAlinea ($codAlinea)",
+      s"$dsSubalinea ($codSubalinea)",
+      s"$dsEspecie ($codEspecie)",
       vlPrevisto,
       vlRealizado,
       ano,
