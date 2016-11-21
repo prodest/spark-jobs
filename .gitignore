@@ -2,3 +2,8 @@
 target/
 project/target
 project/project
+saida/
+src/main/java/
+src/main/scala-2.10/
+src/main/scala/
+src/test/
