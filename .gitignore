@@ -7,3 +7,6 @@ src/main/java/
 src/main/scala-2.10/
 src/main/scala/
 src/test/
+.ensime_cache/
+*.log
+.ensime
