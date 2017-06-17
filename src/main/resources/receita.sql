@@ -32,4 +32,4 @@ SELECT
   END     MesDescritivo,
   data AS dataReceita
 FROM Receita
-WHERE ano >= 2009
+WHERE a.Ano >= 2009
